@@ -18,7 +18,6 @@ blueprint:
       description: 'The window or door sensor that triggers the automation.'
       selector: 
         entity:
-          domain: binary_sensor
     first_timer:
       name: 'First timer'
       description: 'The first notification timer (in minutes).'

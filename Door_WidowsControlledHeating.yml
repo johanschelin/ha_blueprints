@@ -1,0 +1,76 @@
+# 
+# Home Assistant Automation Blueprint
+#
+# Automatically turns of heating if door or Windows is open for a specific amount of time 
+#
+# Modified by Johan Schelin, Mar. 2021
+#
+
+
+blueprint:
+  name: Door/Window controlled heating
+  description: Turns off heating when opening window and turn on with delay
+  domain: automation 
+  input:
+    heating_target:
+      name: Heater
+      selector:
+        entity:
+          domain: climate
+    window_entity:
+      name: Door/Window Sensor
+      selector:
+        entity: {}
+    window_closed_wait:
+      name: Wait time open
+      description: Time to leave the heating on after window or door is opened.
+      default: 120
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: seconds
+    window_opened_wait:
+      name: Wait time closed
+      description: Time to leave the heating off after window or door is closed.
+      default: 120
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: seconds
+# If window or door is closed within the delay,
+# we restart the script.
+mode: restart
+max_exceeded: silent
+
+variables:
+  heating_target: !input 'heating_target'
+  heating_temperature: '{{ state_attr(heating_target, ''temperature'') }}'
+trigger:
+  platform: state
+  entity_id: !input 'window_entity'
+  from: 'off'
+  to: 'on'
+action:
+# timer waiting for door or window being open for X seconds (not turning the heater off if just walking through a door)
+- delay: !input window_opened_wait
+- service: climate.set_hvac_mode
+  entity_id: !input 'heating_target'
+  data:
+    hvac_mode: 'off'
+- wait_for_trigger:
+    platform: state
+    entity_id: !input 'window_entity'
+    from: 'on'
+    to: 'off'
+# timer is reset is door is closed within this delay
+- delay: !input window_closed_wait
+- service: climate.set_hvac_mode
+  entity_id: !input 'heating_target'
+  data:
+    hvac_mode: heat
+- service: climate.set_temperature
+  entity_id: !input 'heating_target'
+  data:
+    temperature: '{{heating_temperature}}'
