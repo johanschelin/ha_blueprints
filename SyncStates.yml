@@ -3,13 +3,13 @@
 #
 # Synchronize on/off states on multiple devices
 #
-# Revision 1
+# Revision 2
 # Modified by Johan Schelin, Mar. 2021
 #
 
 blueprint:
-  name: State Bonding - Triple
-  description: Bind 3 entities together to act in unison (selected entites must all support the same state values)
+  name: Synchronize States Multi
+  description: Bind multiple entities together to act in unison (selected entites must all support the same state values)
   domain: automation
   input:
     switch_1:
@@ -28,16 +28,22 @@ blueprint:
       selector:
         entity:
           #domain: switch
-      
+     switch_4:
+      name: Entity 4
+      selector:
+        entity:
+          #domain: switch
 trigger:
   - entity_id:
     - !input switch_1
     - !input switch_2
     - !input switch_3
+    - !input switch_4
     platform: state
 action:
 - entity_id:
   - !input switch_1
   - !input switch_2
   - !input switch_3
+  - !input switch_4
   service: 'homeassistant.turn_{{ trigger.to_state.state }}'
