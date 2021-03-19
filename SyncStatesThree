@@ -1,0 +1,41 @@
+# 
+# Home Assistant Automation Blueprint
+#
+# Synchronize on/off states on three devices
+#
+# Revision 2
+# Modified by Johan Schelin, Mar. 2021
+#
+
+blueprint:
+  name: Synchronize Three States
+  description: Bind three entities together to act in unison (selected entites must all support the same state values)
+  domain: automation
+  input:
+    switch_1:
+      name: Entity 1
+      selector:
+        entity:
+          #domain: switch          
+    switch_2:
+      name: Entity 2
+      selector:
+        entity:
+          #domain: switch
+    switch_3:
+      name: Entity 3
+      selector:
+        entity:
+          #domain: switch
+trigger:
+  - entity_id:
+    - !input switch_1
+    - !input switch_2
+    - !input switch_3
+    platform: state
+action:
+- entity_id:
+  - !input switch_1
+  - !input switch_2
+  - !input switch_3
+  service: 'homeassistant.turn_{{ trigger.to_state.state }}'
