@@ -41,13 +41,13 @@ blueprint:
           mode: slider
     third_timer:
       name: 'Third timer'
-      description: 'The third notification timer (in minutes).'
-      default: 90
+      description: 'The third notification timer (in hours).'
+      default: 2
       selector: 
         number:
           min: 1
           step: 1
-          max: 180
+          max: 12
           mode: slider
     temperature:
       name: 'Temperature'
@@ -99,8 +99,8 @@ trigger:
   from: 'off'
   to: 'on'
   for:
-    hours: 0
-    minutes: !input third_timer
+    hours: !input third_timer
+    minutes: 0
     seconds: 0
 
 # Two conditions:
