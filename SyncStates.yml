@@ -16,8 +16,7 @@ blueprint:
       name: Entity 1
       selector:
         entity:
-          #domain: switch
-          
+          #domain: switch          
     switch_2:
       name: Entity 2
       selector:
