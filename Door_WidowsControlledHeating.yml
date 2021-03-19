@@ -6,7 +6,6 @@
 # Modified by Johan Schelin, Mar. 2021
 #
 
-
 blueprint:
   name: Door/Window controlled heating
   description: Turns off heating when opening window and turn on with delay

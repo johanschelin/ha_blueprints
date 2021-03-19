@@ -14,7 +14,7 @@ blueprint:
   domain: automation
   input: 
     contact_sensor: 
-      name: Door/Window Sensor
+      name: Contact Sensor
       description: 'The window or door sensor that triggers the automation.'
       selector: 
         entity:
@@ -77,7 +77,7 @@ blueprint:
 # We will have two triggers, for the two different reminders. 
 # However, a reminder will be ignored if the door or window is already closed by then. 
 trigger:
-- platform: state
+  platform: state
   entity_id: !input contact_sensor
   from: 'off'
   to: 'on'
@@ -85,7 +85,7 @@ trigger:
     hours: 0
     minutes: !input first_timer
     seconds: 0
-- platform: state
+  platform: state
   entity_id: !input contact_sensor
   from: 'off'
   to: 'on'
@@ -93,7 +93,7 @@ trigger:
     hours: 0
     minutes: !input second_timer
     seconds: 0
-- platform: state
+  platform: state
   entity_id: !input contact_sensor
   from: 'off'
   to: 'on'
