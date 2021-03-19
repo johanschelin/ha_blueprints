@@ -8,7 +8,7 @@
 #
 
 blueprint:
-  name: State Bonding - Dual
+  name: State Bonding - Triple
   description: Bind 3 entities together to act in unison (selected entites must all support the same state values)
   domain: automation
   input:
