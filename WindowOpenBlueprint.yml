@@ -77,30 +77,30 @@ blueprint:
 # We will have two triggers, for the two different reminders. 
 # However, a reminder will be ignored if the door or window is already closed by then. 
 trigger:
-  platform: state
-  entity_id: !input contact_sensor
-  from: 'off'
-  to: 'on'
-  for:
-    hours: 0
-    minutes: !input first_timer
-    seconds: 0
-  platform: state
-  entity_id: !input contact_sensor
-  from: 'off'
-  to: 'on'
-  for:
-    hours: 0
-    minutes: !input second_timer
-    seconds: 0
-  platform: state
-  entity_id: !input contact_sensor
-  from: 'off'
-  to: 'on'
-  for:
-    hours: !input third_timer
-    minutes: 0
-    seconds: 0
+  - platform: state
+    entity_id: !input contact_sensor
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: !input first_timer
+      seconds: 0
+  - platform: state
+    entity_id: !input contact_sensor
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: !input second_timer
+      seconds: 0
+  - platform: state
+    entity_id: !input contact_sensor
+    from: 'off'
+    to: 'on'
+    for:
+      hours: !input third_timer
+      minutes: 0
+      seconds: 0
 
 # Two conditions:
 # 1. The door or window should still be open. 
