@@ -8,8 +8,8 @@
 #
 
 blueprint:
-  name: Synchronize States Multi
-  description: Bind multiple entities together to act in unison (selected entites must all support the same state values)
+  name: Synchronize Four States
+  description: Bind four entities together to act in unison (selected entites must all support the same state values)
   domain: automation
   input:
     switch_1:

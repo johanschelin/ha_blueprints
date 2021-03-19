@@ -98,9 +98,9 @@ trigger:
     from: 'off'
     to: 'on'
     for:
-      hours: !input third_timer
-      minutes: 0
-      seconds: 0
+    hours: !input third_timer
+    minutes: 0
+    seconds: 0
 
 # Two conditions:
 # 1. The door or window should still be open. 
