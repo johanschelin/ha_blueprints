@@ -1,11 +1,10 @@
 # 
 # Home Assistant Automation Blueprint
 #
-# Sends three notifications to close a window or door after opening it, to two devices
+# Sends two notifications to close a window or door after opening it, 
 # if the temperature outside is below a certain degree. 
 #
-# Revision 3
-# Modified by Johan Schelin, original by
+# Revision 2
 # Roozbeh Farahbod, Jan. 2021
 #
 
@@ -33,7 +32,7 @@ blueprint:
     second_timer:
       name: 'Second timer'
       description: 'The second notification timer (in minutes).'
-      default: 15
+      default: 30
       selector: 
         number:
           min: 1
@@ -43,12 +42,12 @@ blueprint:
     third_timer:
       name: 'Third timer'
       description: 'The third notification timer (in minutes).'
-      default: 15
+      default: 90
       selector: 
         number:
           min: 1
           step: 1
-          max: 60
+          max: 180
           mode: slider
     temperature:
       name: 'Temperature'
