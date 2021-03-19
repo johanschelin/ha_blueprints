@@ -19,12 +19,13 @@ blueprint:
           domain: climate
     window_entity:
       name: Door/Window Sensor
+      description: 'The window or door sensor that triggers the automation.'
       selector:
         entity: {}
     window_closed_wait:
       name: Wait time open
       description: Time to leave the heating on after window or door is opened.
-      default: 120
+      default: 300
       selector:
         number:
           min: 0
