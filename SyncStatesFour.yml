@@ -45,6 +45,10 @@ action:
   - !input switch_2
   - !input switch_3
   - !input switch_4
-  service: 'homeassistant.turn_{{ trigger.to_state.state }}'
-  
+  service:  '{% if trigger.to_state.state == "on" %} light.turn_on {% elif trigger.to_state.state == "off" %} light.turn_off {% endif %}'
+  - delay:
+    hours: 0
+    minutes: 0
+    seconds: 10
+    milliseconds: 0
   mode: single
