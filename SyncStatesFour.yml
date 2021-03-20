@@ -1,9 +1,9 @@
 # 
 # Home Assistant Automation Blueprint
 #
-# Synchronize on/off states on multiple devices
+# Synchronize on/off states on multiple devices with queue
 #
-# Revision 3 with single mode and delay
+# Revision 5 with single mode and delay
 # Modified by Johan Schelin, Mar. 2021
 #
 
@@ -51,4 +51,4 @@ action:
     minutes: 0
     seconds: 10
     milliseconds: 0
-  mode: single
+  mode: queued
