@@ -76,7 +76,7 @@ blueprint:
           integration: mobile_app
   # We will have two triggers, for the two different reminders. 
   # However, a reminder will be ignored if the door or window is already closed by then. 
-  trigger:
+trigger:
   - platform: state
     entity_id: !input contact_sensor
     from: 'off'
