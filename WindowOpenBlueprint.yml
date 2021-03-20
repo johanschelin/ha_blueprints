@@ -4,7 +4,7 @@
 # Sends multiple notifications to multiple devices to close a window or door after opening it, 
 # if the temperature outside is below a certain degree. 
 #
-# Revision 4
+# Revision 5
 # Modified by Johan Schelin, Mar. 2021
 #
 
