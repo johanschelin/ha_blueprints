@@ -47,4 +47,4 @@ action:
   - !input switch_4
   service:  '{% if trigger.to_state.state == "on" %} light.turn_on {% elif trigger.to_state.state == "off" %} light.turn_off {% endif %}'
 
-  mode: queued
+mode: queued
