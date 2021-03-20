@@ -39,3 +39,5 @@ action:
   - !input switch_2
   - !input switch_3
   service: 'homeassistant.turn_{{ trigger.to_state.state }}'
+
+  mode: single
