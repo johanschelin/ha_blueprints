@@ -110,7 +110,7 @@ condition:
   entity_id: !input contact_sensor
   state: 'on'
 - condition: numeric_state
-  entity_id: weather.pihome
+  entity_id: weather.idvagen
   attribute: temperature
   below: !input temperature
 

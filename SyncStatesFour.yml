@@ -1,9 +1,9 @@
 # 
 # Home Assistant Automation Blueprint
 #
-# Synchronize on/off states on multiple devices with queue
+# Synchronize on/off states on multiple devices
 #
-# Revision 8 with single mode and delay
+# Revision 8
 # Modified by Johan Schelin, Mar. 2021
 #
 
