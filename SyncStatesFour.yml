@@ -3,7 +3,7 @@
 #
 # Synchronize on/off states on multiple devices
 #
-# Revision 8
+# Revision 1
 # Modified by Johan Schelin, Mar. 2021
 #
 
@@ -49,17 +49,9 @@ trigger:
   - platform: state
     entity_id: !input 'switch_4'  
 action:
-- entity_id:
-  - '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_2 }}'
-  - '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_3 }}'
-  - '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_4 }}'
-  - '{% if trigger.from_state.entity_id == switch_2 %} {{ switch_1 }}'
-  - '{% if trigger.from_state.entity_id == switch_2 %} {{ switch_3 }}'
-  - '{% if trigger.from_state.entity_id == switch_2 %} {{ switch_4 }}'
-  - '{% if trigger.from_state.entity_id == switch_3 %} {{ switch_1 }}'
-  - '{% if trigger.from_state.entity_id == switch_3 %} {{ switch_2 }}'
-  - '{% if trigger.from_state.entity_id == switch_3 %} {{ switch_4 }}'
-  - '{% if trigger.from_state.entity_id == switch_4 %} {{ switch_1 }}'
-  - '{% if trigger.from_state.entity_id == switch_4 %} {{ switch_2 }}'
-  - '{% if trigger.from_state.entity_id == switch_4 %} {{ switch_3 }}'
   service:  homeassistant.turn_{{ trigger.to_state.state }}
+  entity_id:
+    - '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_2 }} {% elif trigger.from_state.entity_id == switch_2 %} {{ switch_1 }} {% elif trigger.from_state.entity_id == switch_3 %} {{ switch_1 }} {% else %}  {{ switch_1 }}'
+    - '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_3 }} {% elif trigger.from_state.entity_id == switch_2 %} {{ switch_3 }} {% elif trigger.from_state.entity_id == switch_3 %} {{ switch_2 }} {% else %}  {{ switch_2 }}'
+    - '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_4 }} {% elif trigger.from_state.entity_id == switch_2 %} {{ switch_4 }} {% elif trigger.from_state.entity_id == switch_3 %} {{ switch_4 }} {% else %}  {{ switch_3 }}'
+  
