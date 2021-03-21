@@ -3,7 +3,7 @@
 #
 # Automatically turns of heating if door or Windows is open for a specific amount of time 
 #
-# Rev 1
+# Rev 2 with three Timers and two Notify Devices
 # Modified by Johan Schelin, Mar. 2021
 
 blueprint:
@@ -37,6 +37,16 @@ blueprint:
           step: 1.0
           max: 60.0
           mode: slider
+    third_timer:
+      name: Third timer
+      description: The first notification timer (in minutes).
+      default: 10
+      selector:
+        number:
+          min: 1.0
+          step: 1.0
+          max: 360.0
+          mode: slider
     temperature:
       name: Temperature
       description: The outside temperature below which the notification should be
@@ -49,13 +59,19 @@ blueprint:
           max: 25.0
           mode: slider
     device_identifier:
-      name: Device to notify
+      name: Device 1 to notify
       description: 'The device to receive the notification; it needs to run the official  Home
         Assistant app to receive notifications.'
       selector:
         device:
           integration: mobile_app
-  source_url: https://github.com/home-IoT/hass-blueprints/blob/main/reminder_to_close_window.yaml
+    device_identifier2:
+      name: Device 2 to notify
+      description: 'The device to receive the notification; it needs to run the official  Home
+        Assistant app to receive notifications.'
+      selector:
+        device:
+          integration: mobile_app
 trigger:
 - platform: state
   entity_id: !input 'contact_sensor'
@@ -73,6 +89,14 @@ trigger:
     hours: 0
     minutes: !input 'second_timer'
     seconds: 0
+- platform: state
+  entity_id: !input 'contact_sensor'
+  from: 'off'
+  to: 'on'
+  for:
+    hours: 0
+    minutes: !input 'third_timer'
+    seconds: 0
 condition:
 - condition: state
   entity_id: !input 'contact_sensor'
@@ -83,6 +107,11 @@ condition:
   below: !input 'temperature'
 action:
 - device_id: !input 'device_identifier'
+  domain: mobile_app
+  type: notify
+  message: Time to close {{trigger.to_state.attributes.friendly_name}}.
+  title: Close {{trigger.to_state.attributes.friendly_name}}!
+- device_id: !input 'device_identifier2'
   domain: mobile_app
   type: notify
   message: Time to close {{trigger.to_state.attributes.friendly_name}}.
