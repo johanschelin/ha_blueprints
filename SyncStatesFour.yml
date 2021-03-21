@@ -3,7 +3,7 @@
 #
 # Synchronize on/off states on multiple devices with queue
 #
-# Revision 6 with single mode and delay
+# Revision 7 with single mode and delay
 # Modified by Johan Schelin, Mar. 2021
 #
 
@@ -32,6 +32,13 @@ blueprint:
       selector:
         entity:
           #domain: switch
+mode: restart
+max_exceeded: silent
+variables:
+  switch_1: !input 'switch_1'
+  switch_2: !input 'switch_2'
+  switch_3: !input 'switch_3'
+  switch_4: !input 'switch_4'
 trigger:
   - entity_id:
     - !input switch_1
@@ -41,10 +48,16 @@ trigger:
     platform: state
 action:
 - entity_id:
-  - !input switch_1
-  - !input switch_2
-  - !input switch_3
-  - !input switch_4
-  service:  '{% if trigger.to_state.state == "on" %} light.turn_on {% elif trigger.to_state.state == "off" %} light.turn_off {% endif %}'
-
-mode: queued
+  - '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_2 }}'
+  - '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_3 }}'
+  - '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_4 }}'
+  - '{% if trigger.from_state.entity_id == switch_2 %} {{ switch_1 }}'
+  - '{% if trigger.from_state.entity_id == switch_2 %} {{ switch_3 }}'
+  - '{% if trigger.from_state.entity_id == switch_2 %} {{ switch_4 }}'
+  - '{% if trigger.from_state.entity_id == switch_3 %} {{ switch_1 }}'
+  - '{% if trigger.from_state.entity_id == switch_3 %} {{ switch_2 }}'
+  - '{% if trigger.from_state.entity_id == switch_3 %} {{ switch_4 }}'
+  - '{% if trigger.from_state.entity_id == switch_4 %} {{ switch_1 }}'
+  - '{% if trigger.from_state.entity_id == switch_4 %} {{ switch_2 }}'
+  - '{% if trigger.from_state.entity_id == switch_4 %} {{ switch_3 }}'
+  service:  homeassistant.turn_{{ trigger.to_state.state }}
