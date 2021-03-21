@@ -4,7 +4,7 @@
 # Sends multiple notifications to multiple devices to close a window or door after opening it, 
 # if the temperature outside is below a certain degree. 
 #
-# Revision 7
+# Revision 7.1
 # Modified by Johan Schelin, Mar. 2021
 #
 
@@ -85,7 +85,7 @@ trigger:
   to: 'on'
   for:
     hours: 0
-    minutes: !input first_timer
+    minutes: '!input first_timer'
     seconds: 0
 - platform: state
   entity_id: !input contact_sensor
@@ -93,7 +93,7 @@ trigger:
   to: 'on'
   for:
     hours: 0
-    minutes: !input second_timer
+    minutes: !input 'second_timer'
     seconds: 0
 - platform: state
   entity_id: !input contact_sensor
@@ -101,7 +101,7 @@ trigger:
   to: 'on'
   for:
     hours: 0
-    minutes: !input second_timer
+    minutes: !input 'third_timer'
     seconds: 0
 
 # Two conditions:
