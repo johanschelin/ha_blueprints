@@ -41,13 +41,13 @@ blueprint:
           mode: slider
     third_timer:
       name: 'Third timer'
-      description: 'The third notification timer (in hours).'
+      description: 'The third notification timer (in minutes).'
       default: 2
       selector: 
         number:
           min: 1
-          step: 1
-          max: 12
+          step: 10
+          max: 300
           mode: slider
     temperature:
       name: 'Temperature'
@@ -100,9 +100,9 @@ trigger:
   from: 'off'
   to: 'on'
   for:
-  hours: !input third_timer
-  minutes: 0
-  seconds: 0
+    hours: 0
+    minutes: !input second_timer
+    seconds: 0
 
 # Two conditions:
 # 1. The door or window should still be open. 
