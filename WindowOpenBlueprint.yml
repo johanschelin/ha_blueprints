@@ -35,7 +35,7 @@ blueprint:
         number:
           min: 30.0
           step: 10.0
-          max: 24.0
+          max: 240.0
           mode: slider
     third_timer:
       name: Third timer
