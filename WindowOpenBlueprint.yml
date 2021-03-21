@@ -1,83 +1,61 @@
 # 
 # Home Assistant Automation Blueprint
 #
-# Sends multiple notifications to multiple devices to close a window or door after opening it, 
-# if the temperature outside is below a certain degree. 
+# Automatically turns of heating if door or Windows is open for a specific amount of time 
 #
-# Revision 7.2
+# Rev 1
 # Modified by Johan Schelin, Mar. 2021
-#
 
 blueprint:
-  name: Notification to Close a Window or Door
-  description: Notification to close Windows/Doors if it is cold outside
+  name: Notification to Close a Window
+  description: Notification to close windows if it is cold outside
   domain: automation
-  input: 
-    contact_sensor: 
+  input:
+    contact_sensor:
       name: Contact Sensor
-      description: 'The window or door sensor that triggers the automation.'
-      selector: 
+      description: The window or door sensor that triggers the automation.
+      selector:
         entity:
           domain: binary_sensor
     first_timer:
-      name: 'First timer'
-      description: 'The first notification timer (in minutes).'
+      name: First timer
+      description: The first notification timer (in minutes).
       default: 10
-      selector: 
+      selector:
         number:
-          min: 1
-          step: 1
-          max: 60
+          min: 1.0
+          step: 1.0
+          max: 60.0
           mode: slider
     second_timer:
-      name: 'Second timer'
-      description: 'The second notification timer (in minutes).'
-      default: 30
-      selector: 
+      name: Second timer
+      description: The second notification timer (in minutes).
+      default: 15
+      selector:
         number:
-          min: 1
-          step: 1
-          max: 60
-          mode: slider
-    third_timer:
-      name: 'Third timer'
-      description: 'The third notification timer (in minutes).'
-      default: 2
-      selector: 
-        number:
-          min: 1
-          step: 10
-          max: 300
+          min: 1.0
+          step: 1.0
+          max: 60.0
           mode: slider
     temperature:
-      name: 'Temperature'
-      description: 'The outside temperature below which the notification should be sent.'
+      name: Temperature
+      description: The outside temperature below which the notification should be
+        sent.
       default: 20
-      selector: 
+      selector:
         number:
-          min: 0
-          step: 1
-          max: 25
+          min: 0.0
+          step: 1.0
+          max: 25.0
           mode: slider
-    first_device_identifier:
-      name: 'Device #1 to notify'
-      description: >
-        The device to receive the notification; it needs to run the official 
-        Home Assistant app to receive notifications.
-      selector: 
+    device_identifier:
+      name: Device to notify
+      description: 'The device to receive the notification; it needs to run the official  Home
+        Assistant app to receive notifications.'
+      selector:
         device:
           integration: mobile_app
-    second_device_identifier:
-      name: 'Device #2 to notify'
-      description: >
-        The device to receive the notification; it needs to run the official 
-        Home Assistant app to receive notifications.
-      selector: 
-        device:
-          integration: mobile_app
-
-  # We will have two triggers, for the two different reminders. 
-  # However, a reminder will be ignored if the door or window is already closed by then. 
+  source_url: https://github.com/home-IoT/hass-blueprints/blob/main/reminder_to_close_window.yaml
 trigger:
 - platform: state
   entity_id: !input 'contact_sensor'
@@ -95,38 +73,18 @@ trigger:
     hours: 0
     minutes: !input 'second_timer'
     seconds: 0
-- platform: state
-  entity_id: !input 'contact_sensor'
-  from: 'off'
-  to: 'on'
-  for:
-    hours: 0
-    minutes: !input 'third_timer'
-    seconds: 0
-
-# Two conditions:
-# 1. The door or window should still be open. 
-# 2. The temperature reading must be below the set value. 
 condition:
 - condition: state
-  entity_id: !input contact_sensor
+  entity_id: !input 'contact_sensor'
   state: 'on'
 - condition: numeric_state
   entity_id: weather.idvagen
   attribute: temperature
-  below: !input temperature
-
-# Send a notification to the mobile device. 
+  below: !input 'temperature'
 action:
-- device_id: !input first_device_identifier
+- device_id: !input 'device_identifier'
   domain: mobile_app
   type: notify
-  message: 'Time to close {{trigger.to_state.attributes.friendly_name}}.'
-  title: 'Close {{trigger.to_state.attributes.friendly_name}}!'
-- device_id: !input second_device_identifier
-  domain: mobile_app
-  type: notify
-  message: 'Time to close {{trigger.to_state.attributes.friendly_name}}.'
-  title: 'Close {{trigger.to_state.attributes.friendly_name}}!'
-
+  message: Time to close {{trigger.to_state.attributes.friendly_name}}.
+  title: Close {{trigger.to_state.attributes.friendly_name}}!
 mode: single
