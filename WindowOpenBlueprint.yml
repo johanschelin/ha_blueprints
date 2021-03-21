@@ -20,32 +20,32 @@ blueprint:
     first_timer:
       name: First timer
       description: The first notification timer (in minutes).
-      default: 10
+      default: 60
       selector:
         number:
           min: 1.0
-          step: 1.0
-          max: 60.0
+          step: 5.0
+          max: 120.0
           mode: slider
     second_timer:
       name: Second timer
       description: The second notification timer (in minutes).
-      default: 15
+      default: 120
       selector:
         number:
-          min: 1.0
-          step: 1.0
-          max: 60.0
+          min: 30.0
+          step: 10.0
+          max: 24.0
           mode: slider
     third_timer:
       name: Third timer
       description: The first notification timer (in minutes).
-      default: 10
+      default: 240
       selector:
         number:
-          min: 1.0
-          step: 1.0
-          max: 360.0
+          min: 60.0
+          step: 30.0
+          max: 500.0
           mode: slider
     temperature:
       name: Temperature
