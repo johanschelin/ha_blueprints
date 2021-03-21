@@ -40,12 +40,14 @@ variables:
   switch_3: !input 'switch_3'
   switch_4: !input 'switch_4'
 trigger:
-  - entity_id:
-    - !input switch_1
-    - !input switch_2
-    - !input switch_3
-    - !input switch_4
-    platform: state
+  - platform: state
+    entity_id: !input 'switch_1'
+  - platform: state
+    entity_id: !input 'switch_2'
+  - platform: state
+    entity_id: !input 'switch_3'  
+  - platform: state
+    entity_id: !input 'switch_4'  
 action:
 - entity_id:
   - '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_2 }}'
