@@ -3,12 +3,12 @@
 #
 # Synchronize on/off states on three devices
 #
-# Revision 1.0
+# Revision 1.1
 # Modified by Johan Schelin, Mar. 2021
 #
 
 blueprint:
-  name: Synchronize Four States
+  name: Synchronize Three States
   description: Bind three entities together to act in unison (selected entites must all support the same state values)
   domain: automation
   input:
