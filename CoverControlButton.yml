@@ -1,0 +1,114 @@
+# 
+# Home Assistant Automation Blueprint
+#
+# CoverControl by Single Switch
+#
+# Revision 1.1
+# Modified by Johan Schelin, Mar. 2021
+#
+
+blueprint:
+  name: Dual Relay blinds control
+  description: '# Dual Relay Blinds/Shades control
+
+    Allows control of blinds, shades or other cover-like mechanisms that are driven
+    by an interlocking dual relay device, where only one relay can be on at a time.
+
+
+    These devices are readily availalble from multiple manufacturers.
+
+
+    The dual relay device also needs an inching function for the best functionality.
+    That way the switch entities will turn themselves off when idle, and you can save
+    button presses or switch clicks.
+
+
+    The motor for your blinds needs to stop at set points automatically. This is the
+    case with most cheap DC tube motors for shades you would order online.
+
+
+    ## Configuration requires 4 entities:
+
+    + One switch entity for up/open
+
+    + One switch entity for down/close
+
+    + An input_boolean for the current state/last move (on is up/open, off is down/closed).
+
+    + An entity which will act as a momentary switch to open, close, or stop the blinds.
+    A switch or input_boolean is recommended.
+
+
+    ## Function:
+
+    + If the relays are both off, the shades will move in the oposite direction from
+    their last move, and the state boolean will be updated.
+
+    + If either the up switch or down switch is on, it will turn both off '
+  domain: automation
+  input:
+    up_entity:
+      name: Up/Open
+      description: The switch entity that raises/opens your shades.
+      selector:
+        entity:
+          domain: light
+    down_entity:
+      name: Down/Close
+      description: The switch entity that lowers/closes your shades.
+      selector:
+        entity:
+          domain: light
+    blinds_switch_entity:
+      name: Control Entity
+      description: Switch, input_boolean, or other entity with on and off states which
+        will act as a momentary button to open, close, and stop your blinds.
+      selector:
+        entity: {}
+    state_boolean:
+      name: State Boolean
+      description: You must create and specify an input_boolean to store the state
+        of your shade/blind.
+      selector:
+        entity:
+          domain: input_boolean
+  source_url: https://community.home-assistant.io/t/switch-as-toggle-to-control-shades-blinds/289662
+variables:
+  upe: !input 'up_entity'
+  dne: !input 'down_entity'
+  bsw: !input 'blinds_switch_entity'
+  sbl: !input 'state_boolean'
+trigger:
+- platform: state
+  entity_id: !input 'blinds_switch_entity'
+  from: 'off'
+  to: 'on'
+action:
+- service: homeassistant.turn_off
+  entity_id: !input 'blinds_switch_entity'
+- service: light.turn_on
+  data_template:
+    entity_id: '{% if states(upe) == ''off'' and states(dne) == ''off'' and states(sbl)
+      == ''off''%} {{ upe }} {% else %} none {% endif %}
+
+      '
+- service: light.turn_on
+  data_template:
+    entity_id: '{% if states(upe) == ''off'' and states(dne) == ''off'' and states(sbl)
+      == ''on''%} {{ dne }} {% else %} none {% endif %}
+
+      '
+- service: light.turn_off
+  data_template:
+    entity_id: '{% if states(upe) == ''on'' or states(dne) == ''on'' %} {{ upe }},
+      {{ dne }} {% else %} none {% endif %}
+
+      '
+- delay: 0.5
+- service: input_boolean.toggle
+  data_template:
+    entity_id: '{% if states(upe) == ''on'' or states(dne) == ''on'' %} {{ sbl }}
+      {% else %} none {% endif %}
+
+      '
+mode: queued
