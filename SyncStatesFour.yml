@@ -3,7 +3,7 @@
 #
 # Synchronize on/off states on four devices
 #
-# Revision 1.0
+# Revision 1.1 - Added delay and changed to single mode to prevent loop
 # Modified by Johan Schelin, Mar. 2021
 #
 
@@ -30,7 +30,7 @@ blueprint:
       selector:
         entity: {}
   source_url: https://github.com/johanschelin/ha_blueprints/blob/main/SyncStatesFour.yml
-mode: restart
+mode: single
 max_exceeded: silent
 variables:
   switch_1: !input 'switch_1'
@@ -56,3 +56,8 @@ action:
   - service: homeassistant.turn_{{ trigger.to_state.state }}
     data:
       entity_id: '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_4 }} {% elif trigger.from_state.entity_id == switch_2 %} {{ switch_4 }} {% elif trigger.from_state.entity_id == switch_3 %} {{ switch_4 }} {% else %}  {{ switch_3 }}  {% endif %}'
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0

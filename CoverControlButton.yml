@@ -5,7 +5,11 @@
 #
 # Revision 1.1
 # Modified by Johan Schelin, Mar. 2021
-#
+# 
+# TODO IN COMING VERSIONS
+# - ADD A TIMER SO THE BUTTONS DOESN'T STAY PUSHED
+# - ADD A THREE-CONTROL-BUTTON VARIANT
+# - ADD A DOUBLE COVER CONTROL VARIANT TO CONTROL TWO BLINDS FROM SAME BUTTON
 
 blueprint:
   name: Dual Relay blinds control
