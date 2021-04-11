@@ -8,16 +8,12 @@
 # 
 # TODO IN COMING VERSIONS
 # - ADD MULTIPLE CAMERAS IN THE SAME SCRIPT
-# - ADD SECOND NOTIFIER
-# - ADD SCRIPT FOR LIGHT-TURN-ON
 
 
 blueprint:
   name: Send a camera snapshot when motion is detected, and trigger script
   description: 'This automation blueprint creates a camera snapshot if motion is detected  and
-    sends a notification to your phone with the picture.
-
-    '
+    sends a notification to your phone with the picture.'
   domain: automation
   input:
     motion_sensor:
@@ -61,6 +57,12 @@ blueprint:
       name: Notification message (Optional)
       description: 'Default: "{{ motion_sensor_name }} detected movement!"'
       default: '{{ motion_sensor_name }} detected movement!'
+    script:
+      name: Script to run
+      description: Select a script to run for actions, like turning on a light
+      selector:
+        entity:
+          domain: script
     delay:
       name: Delay (Optional)
       description: Wait before creating camera snapshot
@@ -72,7 +74,7 @@ blueprint:
           unit_of_measurement: seconds
           mode: slider
           step: 1.0
-  source_url: https://community.home-assistant.io/t/send-camera-snapshot-notification-on-motion/254565
+  source_url: https://github.com/johanschelin/ha_blueprints/blob/main/CameraSnapshotWhenMotion.yml
 trigger:
   platform: state
   entity_id: !input 'motion_sensor'
@@ -88,10 +90,19 @@ variables:
   notification_title: !input 'notification_title'
   notification_message: !input 'notification_message'
   delay: !input 'delay'
+  script: !input 'script'
   snapshot_create_file_path: /config/www/tmp/snapshot_{{ states[camera].object_id
     }}.jpg
   snapshot_access_file_path: '{{ snapshot_create_file_path | replace(''/config/www'',''/local'')
     }}'
+condition: or
+conditions:
+  - condition: state
+    entity_id: alarm_control_panel.huset
+    state: armed_away
+  - condition: state
+    entity_id: alarm_control_panel.huset
+    state: armed_home
 action:
 - delay: '{{ delay }}'
 - service: camera.snapshot
@@ -114,4 +125,4 @@ action:
   data: '{% set android_data = {"image": "%s"} | format(snapshot_access_file_path)
     %} {% set ios_data = {"attachment": {"url": "%s", "content_type": "JPEG"}} | format(snapshot_access_file_path)
     %} {{ ios_data if is_ios else android_data }}'
-- service: script.alarm_light
+- service: !input 'script'
