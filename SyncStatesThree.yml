@@ -3,29 +3,33 @@
 #
 # Synchronize on/off states on three devices
 #
-# Revision 1.2 - Added delay and changed to single mode to prevent loop
-# Modified by Johan Schelin, Mar. 2021
+# Revision 1.3 - Added condition to handle unavailable states
+# Modified by Johan Schelin, Apr. 2021
 #
 
 blueprint:
   name: Synchronize Three States
-  description: Bind three entities together to act in unison (selected entites must all support the same state values)
+  description: Bind three entities together to act in unison (selected entites must
+    all support the same state values) - In this version restricted to on/off
   domain: automation
   input:
     switch_1:
-      name: Entity 1
+      name: First entity
+      description: Mandatory - The first entity to keep in sync.
       selector:
         entity: {}
     switch_2:
-      name: Entity 2
+      name: Second entity
+      description: Mandatory - The second entity to keep in sync.
       selector:
         entity: {}
     switch_3:
-      name: Entity 3
+      name: Third entity
+      description: Mandatory - The third entity to keep in sync.
       selector:
         entity: {}
   source_url: https://github.com/johanschelin/ha_blueprints/blob/main/SyncStatesThree.yml
-mode: single
+mode: restart
 max_exceeded: silent
 variables:
   switch_1: !input 'switch_1'
@@ -33,20 +37,24 @@ variables:
   switch_3: !input 'switch_3'
 trigger:
 - platform: state
-  entity_id: !input 'switch_1'
-- platform: state
-  entity_id: !input 'switch_2'
-- platform: state
-  entity_id: !input 'switch_3'
+  entity_id: 
+    - !input 'switch_1'
+    - !input 'switch_2'
+    - !input 'switch_3'
+  from:
+    - 'on'
+    - 'off'
+condition:
+- condition: template
+  value_template: '{{ states(entity_1) != ''unavailable'' }}'
+- condition: template
+  value_template: '{{ states(entity_2) != ''unavailable'' }}'
+- condition: template
+  value_template: '{{ states(entity_3) != ''unavailable'' }}'
 action:
-  - service: homeassistant.turn_{{ trigger.to_state.state }}
-    data:
-      entity_id: '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_2 }} {% elif trigger.from_state.entity_id == switch_2 %} {{ switch_1 }} {% else %} {{ switch_1 }} {% endif %}'
-  - service: homeassistant.turn_{{ trigger.to_state.state }}
-    data:
-      entity_id: '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_3 }} {% elif trigger.from_state.entity_id == switch_2 %} {{ switch_3 }} {% else %} {{ switch_2 }} {% endif %}'
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 5
-      milliseconds: 0
+- service: homeassistant.turn_{{ trigger.to_state.state }}
+  data:
+    entity_id: '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_2 }} {% elif trigger.from_state.entity_id == switch_2 %} {{ switch_1 }} {% else %} {{ switch_1 }} {% endif %}'
+- service: homeassistant.turn_{{ trigger.to_state.state }}
+  data:
+    entity_id: '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_3 }} {% elif trigger.from_state.entity_id == switch_2 %} {{ switch_3 }} {% else %} {{ switch_2 }} {% endif %}'
