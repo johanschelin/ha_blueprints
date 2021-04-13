@@ -51,13 +51,13 @@ trigger:
     - 'off'
 condition:
 - condition: template
-  value_template: '{{ states(entity_1) != ''unavailable'' }}'
+  value_template: '{{ states(switch_1) != ''unavailable'' }}'
 - condition: template
-  value_template: '{{ states(entity_2) != ''unavailable'' }}'
+  value_template: '{{ states(switch_2) != ''unavailable'' }}'
 - condition: template
-  value_template: '{{ states(entity_3) != ''unavailable'' }}'
+  value_template: '{{ states(switch_3) != ''unavailable'' }}'
 - condition: template
-  value_template: '{{ states(entity_4) != ''unavailable'' }}'
+  value_template: '{{ states(switch_4) != ''unavailable'' }}'
 action:
   - service: homeassistant.turn_{{ trigger.to_state.state }}
     data:
