@@ -9,7 +9,7 @@
 
 blueprint:
   name: Synchronization status - 2
-  description: Bind three entities together to act in unison (selected entites must
+  description: Bind two entities together to act in unison (selected entites must
     all support the same state values) - In this version restricted to on/off
   domain: automation
   input:
@@ -45,4 +45,4 @@ condition:
 action:
 - service: homeassistant.turn_{{ trigger.to_state.state }}
   data:
-    entity_id: '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_2 }} {% elif trigger.from_state.entity_id == switch_2 %} {{ switch_1 }} {% else %} {{ switch_1 }} {% endif %}'
+    entity_id: '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_2 }} {% else %} {{ switch_1 }} {% endif %}'
