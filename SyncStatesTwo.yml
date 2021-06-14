@@ -1,0 +1,48 @@
+# 
+# Home Assistant Automation Blueprint
+#
+# Synchronize on/off states on three devices
+#
+# Revision 1.4 - Added condition to handle unavailable states
+# Modified by Johan Schelin, Apr. 2021
+#
+
+blueprint:
+  name: Synchronization status - 2
+  description: Bind two entities together to act in unison (selected entites must
+    all support the same state values) - In this version restricted to on/off
+  domain: automation
+  input:
+    switch_1:
+      name: First entity
+      description: Mandatory - The first entity to keep in sync.
+      selector:
+        entity: {}
+    switch_2:
+      name: Second entity
+      description: Mandatory - The second entity to keep in sync.
+      selector:
+        entity: {}
+  source_url: https://github.com/johanschelin/ha_blueprints/edit/main/SyncStates-2
+mode: restart
+max_exceeded: silent
+variables:
+  switch_1: !input 'switch_1'
+  switch_2: !input 'switch_2'
+trigger:
+- platform: state
+  entity_id: 
+    - !input 'switch_1'
+    - !input 'switch_2'
+  from:
+    - 'on'
+    - 'off'
+condition:
+- condition: template
+  value_template: '{{ states(switch_1) != ''unavailable'' }}'
+- condition: template
+  value_template: '{{ states(switch_2) != ''unavailable'' }}'
+action:
+- service: homeassistant.turn_{{ trigger.to_state.state }}
+  data:
+    entity_id: '{% if trigger.from_state.entity_id == switch_1 %} {{ switch_2 }} {% else %} {{ switch_1 }} {% endif %}'
