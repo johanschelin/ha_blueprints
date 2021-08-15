@@ -23,7 +23,7 @@ blueprint:
       description: Mandatory - The second entity to keep in sync.
       selector:
         entity: {}
-  source_url: https://github.com/johanschelin/ha_blueprints/edit/main/SyncStatesTwo
+  source_url: https://github.com/johanschelin/ha_blueprints/edit/main/SyncStatesTwo.yml
 mode: restart
 max_exceeded: silent
 variables:
