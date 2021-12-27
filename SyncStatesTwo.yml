@@ -1,7 +1,7 @@
 # 
 # Home Assistant Automation Blueprint
 #
-# Synchronize on/off states on three devices
+# Synchronize on/off states on twp devices
 #
 # Revision 1.4 - Added condition to handle unavailable states
 # Modified by Johan Schelin, Apr. 2021
